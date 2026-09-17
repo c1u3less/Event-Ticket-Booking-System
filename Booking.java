@@ -1,50 +1,41 @@
+/**
+ * Represents a confirmed booking transaction: a customer, an event,
+ * a seat count, and the computed total price.
+ */
 public class Booking {
-    private String ticketId;
-    private String customerName;
-    private String phone;
-    private String seatNumber;
-    private double price;
+    private final String bookingId;
+    private final String eventId;
+    private final String customerName;
+    private final int numberOfSeats;
+    private final double totalPrice;
 
-    public Booking(String ticketId, String customerName, String phone, String seatNumber, double price) {
-        this.ticketId = ticketId;
+    public Booking(String bookingId, String eventId, String customerName, int numberOfSeats, double totalPrice) {
+        this.bookingId = bookingId;
+        this.eventId = eventId;
         this.customerName = customerName;
-        this.phone = phone;
-        this.seatNumber = seatNumber;
-        this.price = price;
+        this.numberOfSeats = numberOfSeats;
+        this.totalPrice = totalPrice;
     }
 
-    public String getTicketId() {
-        return ticketId;
+    public String getBookingId() { return bookingId; }
+    public String getEventId() { return eventId; }
+    public String getCustomerName() { return customerName; }
+    public int getNumberOfSeats() { return numberOfSeats; }
+    public double getTotalPrice() { return totalPrice; }
+
+    public String toFileLine() {
+        return String.join("|", bookingId, eventId, customerName,
+                String.valueOf(numberOfSeats), String.valueOf(totalPrice));
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public static Booking fromFileLine(String line) {
+        String[] p = line.split("\\|");
+        return new Booking(p[0], p[1], p[2], Integer.parseInt(p[3]), Double.parseDouble(p[4]));
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public String getSeatNumber() {
-        return seatNumber;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void displayBooking() {
-        System.out.println("-----------------------------");
-        System.out.println("Ticket ID     : " + ticketId);
-        System.out.println("Customer Name : " + customerName);
-        System.out.println("Phone         : " + phone);
-        System.out.println("Seat Number   : " + seatNumber);
-        System.out.println("Price         : Rs. " + price);
-        System.out.println("-----------------------------");
-    }
-
-    public void displayBooking(String message) {
-        System.out.println("\n" + message);
-        displayBooking();
+    @Override
+    public String toString() {
+        return String.format("Booking ID: %-8s | Event: %-6s | Customer: %-15s | Seats: %2d | Total: $%.2f",
+                bookingId, eventId, customerName, numberOfSeats, totalPrice);
     }
 }
